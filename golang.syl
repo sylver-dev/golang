@@ -233,6 +233,7 @@ node SupEq: Operator { }
 
 node CallExpr {
     fun: GoNode,
+    type_args: List<Type>,
     args: List<GoNode>
 }
 
@@ -671,7 +672,9 @@ rule bool_ops =
   | Sup { '>' }
   | SupEq { '>=' }
 
-rule call_expr = CallExpr { fun@call_expr_target '(' args@sepByTr(',', call_expr_arg) ')' }
+rule call_expr = 
+    CallExpr { fun@call_expr_target '(' args@sepByTr(',', call_expr_arg) ')' }
+  | CallExpr { fun@call_expr_target '[' type_args@sepByTr1(',', type_rule) ']' '(' args@sepByTr(',', call_expr_arg) ')' }
 
 rule call_expr_target = primary_expr | makeable_type_ident
 
