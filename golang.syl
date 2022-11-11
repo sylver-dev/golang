@@ -486,7 +486,6 @@ term IMAG_LIT = `[0-9]+i`
 term RUNE_CONTENT = `'((\\[abfnrtv\\'"])|(\\u[[:xdigit:]]{4})|(\\U[[:xdigit:]]{8})|(\\x[[:xdigit:]]{2})|(\\[0-7]{3})|.)'`
 term INTERPRETED_STRING_LIT = `"([^"\\]|(\\[\\/abnfrtv"])|(\\u[a-fA-F0-9]{4})|(\\[0-7]{3})|(\\U[[:xdigit:]]{8})|(\\x[a-fA-F0-9]+))*"`
 term RAW_STRING_LIT = `\`[^\`]*\``
-term IDENTIFIER_CONTENT = `[\p{Letter}_][\p{Letter}[0-9]_]*`
 term COLON = ':'
 
 ignore term WHITESPACE = `[\s--\n]`
@@ -686,7 +685,6 @@ rule call_expr_arg =
 
 rule selector_expr = [9] SelectorExpr { x@expr '.' sel@identifier }
 
-rule identifier = Identifier { IDENTIFIER_CONTENT }
 
 rule string_literal =
     InterpretedStringLit { INTERPRETED_STRING_LIT }
@@ -788,3 +786,5 @@ rule if_initializer = short_var_decl | assign_stmt | expr
 rule else_stmt = if_stmt | block_stmt
 
 rule block_stmt = BlockStmt { '{' list@sepBy([LINE_RETURN, ';'], statement) '}' }
+
+rule identifier = Identifier { `[\p{Letter}_][\p{Letter}[0-9]_]*` }
